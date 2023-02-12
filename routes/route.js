@@ -7,7 +7,10 @@ const {
   getUser,
   refreshToken,
   logout,
-  todo
+  todo,
+  getTitles,
+  addTitlePost,
+  addTitleGet
 } = require("../controllers/controller");
 
 const router = express.Router();
@@ -27,6 +30,10 @@ router.post("/token", refreshToken);
 router.delete("/logout", logout);
 
 router.get("/todo", todo);
+
+router.post("/addTitle", addTitlePost);
+
+router.get("/addTitle", addTitleGet);
 
 router.post("/todo");
 

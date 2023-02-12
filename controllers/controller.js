@@ -1,5 +1,6 @@
 const User = require("../models/model");
 const Token = require("../models/token");
+const Post = require("../models/post");
 const brcpt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const generateToken = require('./generateToken');
@@ -22,7 +23,7 @@ const createUser = async (req, res) => {
 
     console.log("username: ", req.body.username);
     console.log("password: ", req.body.password);
-    console.log("hashedPasword: ",hashedPassword);
+    console.log("hashedPasword: ", hashedPassword);
 
     /*models klasöründen "user" objesi oluşturup, oluşturulan objeye post methodu ile iletilen body değişkenleri atanır. Bunun için; */
     const newUser = await new User({ username: req.body.username, password: req.body.password, hashedpassword: hashedPassword }); // user object oluşturulur
@@ -112,17 +113,52 @@ const logout = async (req, res) => {
   if (searchedToken.refreshToken == req.body.token) {
     const deletedToken = await Token.deleteOne(searchedToken);
     console.log(deletedToken, ' is deleted');
-    } return res.send('Logged out - Çıkış yapıldı');
+  } return res.send('Logged out - Çıkış yapıldı');
 
 }
 
-const todo = async (req, res)=>{
-  res.render(todo);
+const getTitles = async (req, res) => {
+  try {
+    const posts = await Post.find().lean();// lean() collectiondaki verilerin daha az yer kaplayıp hatasız döndürülmesini sağlar
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const addTitlePost = async (req, res) => {
+  try {
+    console.log(req.body);
+    const newPost = await new Post({ username: req.body.username, title: req.body.title }); // post object oluşturulur
+    console.log(newPost);
+    const createdPost = await newPost.save(); // oluşturulan post object veritabanına kaydedilir.
+    res.status(201).json({ status: true, message: createdPost });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const addTitleGet = async (req, res) => {
+  try {
+    res.render("addTitle");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-const todo2 = async (req, res)=>{}
+const todo = async (req, res) => {
+  try {
+    const titles = await Post.find().lean();
+    res.render("todo", { todos: titles});
+  } catch (error) {
+    console.log(error);
+  }
 
-const todo3 = async (req, res)=>{}
+}
+
+const todo2 = async (req, res) => { }
+
+const todo3 = async (req, res) => { }
 
 module.exports = {
   createUser,
@@ -131,5 +167,8 @@ module.exports = {
   getUser,
   refreshToken,
   logout,
-  todo
+  todo,
+  getTitles,
+  addTitlePost,
+  addTitleGet
 };

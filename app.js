@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const UserRoutes = require('./routes/route');
+const ejs = require('ejs');
+const path = require('path');// to set up template engine folder
 
 require('dotenv').config(); // .env dosyasının heryerden kullaılması için
 
 const app = express();
 
 // set up template engine
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //Json file dosyaları için
