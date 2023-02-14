@@ -1,22 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const UserRoutes = require('./routes/route');
-const ejs = require('ejs');
 const path = require('path');// to set up template engine folder
 
-require('dotenv').config(); // .env dosyasının heryerden kullaılması için
+require('dotenv').config(); // .env dosyasının heryerden kullanılması için
 
 const app = express();
-
-// set up template engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 //Json file dosyaları için
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+// set up template engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // static files
 app.use(express.static('public'));

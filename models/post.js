@@ -7,14 +7,12 @@ const postSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model("Post", postSchema); // MongoDB'deki "COLLECTION NAME" burası
