@@ -1,16 +1,13 @@
 const express = require("express");
 const authToken = require("../middleware/authToken");
 const {
+  getUser,
   createUser,
   deleteUser,
   login,
-  getUser,
   refreshToken,
   logout,
-  todo,
-  getTitles,
-  addTitlePost,
-  addTitleGet
+  todo
 } = require("../controllers/controller");
 
 const router = express.Router();
@@ -29,14 +26,6 @@ router.post("/token", refreshToken);
 
 router.delete("/logout", logout);
 
-router.get("/todo", todo);
-
-router.post("/addTitle", addTitlePost);
-
-router.get("/addTitle", addTitleGet);
-
-router.post("/todo");
-
-router.delete("/todo");
+router.post("/todo", todo);
 
 module.exports = router;

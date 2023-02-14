@@ -21,25 +21,31 @@ body{
 }
 
 input[type="text"]{
-    width: 70%;
+    width: 45%;
     padding: 20px;
     background:#181c22;
     border: 0;
     float: left;
     font-size: 20px;
     color: #989898;
+    border-radius: 8px;
 }
 
 button{
     padding: 20px;
-    width: 30%;
+    margin-left: 15px;
     float: left;
     background: #23282e;
-    border: 0;
+    border: 3;
     box-sizing: border-box;
     color: #fff;
     cursor: pointer;
     font-size: 20px;
+    border-radius: 8px;
+}
+
+button:hover{
+    background: rgba(0,0,0,0.2);
 }
 
 ul{
@@ -68,3 +74,4 @@ h1{
     margin-bottom: 0;
     text-indent: -10000px;
 }
+

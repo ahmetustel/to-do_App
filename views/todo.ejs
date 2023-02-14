@@ -11,15 +11,25 @@
 <body>
     <h1>My Todo List</h1>
     <div id="todo-table">
-        <form>
-            <input type="text" name="item" placeholder="Add new item.." required>
-            <button type="submit">Add Item</button>
-        </form>
+        <div>
+            <form id="formAdd" action="/todo" method="post">
+              <input class="nav-bar1" type="text" id="title" name="title" placeholder="Add new item.." >
+              <button form="formAdd" formaction="/todo" class="nav-bar2" type="submit">Add Item</button>
+              <button form="formDelete" formaction="/todo" type="submit">Delete Item</button>
+            </form>
+            
+        </div>
+        
+        <form class="nav-bar3" id="formDelete" action="/todo" method="post" >
         <ul>
             <% for(var i=0; i<todos.length; i++){ %>
-                <li><%= todos[i].title %></li>
+                <li>
+                    <input type="checkbox" id="<%= todos[i]._id%>" name="<%= todos[i]._id%>" value="<%= todos[i].title%>">
+                    <label for="<%= todos[i]._id%>"><%= todos[i].title %></label>                    
+                    </li>
             <% } %>
         </ul>
+        </form>
     </div>
 </body>
 </html>

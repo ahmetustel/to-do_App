@@ -117,58 +117,53 @@ const logout = async (req, res) => {
 
 }
 
-const getTitles = async (req, res) => {
-  try {
-    const posts = await Post.find().lean();// lean() collectiondaki verilerin daha az yer kaplayıp hatasız döndürülmesini sağlar
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-const addTitlePost = async (req, res) => {
-  try {
-    console.log(req.body);
-    const newPost = await new Post({ username: req.body.username, title: req.body.title }); // post object oluşturulur
-    console.log(newPost);
-    const createdPost = await newPost.save(); // oluşturulan post object veritabanına kaydedilir.
-    res.status(201).json({ status: true, message: createdPost });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-const addTitleGet = async (req, res) => {
-  try {
-    res.render("addTitle");
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 const todo = async (req, res) => {
   try {
+    
+    // ADD ITEM butonu 
+    if (req.body.title) {
+      const newPost = await new Post({ username: req.body.username, title: req.body.title }); // post object oluşturulur
+      console.log(newPost);
+      const createdPost = await newPost.save(); // oluşturulan post object veritabanına kaydedilir.
+      const titles = await Post.find().lean();
+      req.body.title="";
+      return res.render('todo', { todos: titles });
+    }
+
+    //DELETE ITEM butonu
+    let keys = []; // seçilen checkboxların _id bilgilerinin toplanması için
+    let indis = 0; // seçilen checkbox sayısını bulmak için
+    for (const iterator in req.body) {
+      keys[indis] = iterator;
+      indis++;
+    }
+    //Veritabanından tüm title leri çekeriz
     const titles = await Post.find().lean();
-    res.render("todo", { todos: titles});
+    //Gelen checkbox verilerini tespit edip veritabanı ile karşılaştırdıktan sonra _id'si eşit olanı siler
+      for (var index = 0; index < indis; index++) {
+        for (var ind = 0; ind < titles.length; ind++) {
+          if (titles[ind]._id == keys[index]) {
+            const selectedTitle = await Post.findOne({ _id: keys[index] });
+            console.log(selectedTitle.title, " is deleted");
+            const deletedTitle = await Post.deleteOne(selectedTitle);
+          }
+        }
+      }
+      const latestTitles = await Post.find().lean();
+      res.render("todo", { todos: latestTitles });
+
   } catch (error) {
     console.log(error);
+    res.status(500).json(error);
   }
-
 }
 
-const todo2 = async (req, res) => { }
-
-const todo3 = async (req, res) => { }
-
 module.exports = {
+  getUser,
   createUser,
   deleteUser,
   login,
-  getUser,
   refreshToken,
   logout,
-  todo,
-  getTitles,
-  addTitlePost,
-  addTitleGet
+  todo
 };
